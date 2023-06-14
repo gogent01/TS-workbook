@@ -18,7 +18,7 @@ type Constructor = new (...args: any[]) => {};
 
 function InjectHelp<TBase extends Constructor>(Base: TBase, helpText: string) => {
   return class Help extends Base {
-    _helpText = helpText;
+    _helpText: string = helpText;
     
     get helpText() {
       return this._helpText;
