@@ -52,3 +52,64 @@ intriguingButton.showHelp(); // 'Click a button to see what it does!'
 intriguingButton.click(); // Button "What do I do?" clicked!
 ```
 
+### Constrained Mixins
+
+Constrained mixins elaborate interfaces of classes (constructor functions) they can be applied to. In order to use constrained mixins one should make a Contructor type to accept a generic argument and create derivative types from it. Then a mixin definition should use one of the derived types.
+```
+type GConstructor<T = {}> = new (...args: any[]) => T;
+type Positionable = GConstructor<{ x: number; y: number }>;
+function InjectRandomlyPlacible<TBase extends Positionable>(Base: TBase) {
+  return class RandomlyPlacible extends Base {
+    placeRandomly(xmax: number, ymax: number): void {
+      this.x = Math.floor(Math.random() * (xmax + 1));
+      this.y = Math.floor(Math.random() * (ymax + 1));
+    }
+  }
+}
+
+class Shape {
+  x: number;
+  y: number;
+  
+  constructor(x: number, y: number) {
+    this.x = x;
+    this.y = y;
+  }
+}
+
+class Square extends Shape {
+  width: number;
+  
+  constructor(x: number, y: number, width: number) {
+    super(x, y);
+    this.width = width;
+  }
+}
+
+class Canvas {
+  width: number;
+  height: number;
+  color?: string;
+  shapes: Shape[];
+  
+  constructor(width: number, height: number, color?: string) {
+    this.width = width;
+    this.height = height;
+    this.color = color;
+    this.shapes = [];
+  }
+  
+  add(shape: Shape): void {
+    this.shapes.push(shape);
+  }
+}
+
+const RandomSquare = InjectRandomlyPlacible(Square);
+
+const canvas = new Canvas(1024, 768);
+const square = new RandomSquare(0, 0, 40);
+square.placeRandomly(canvas.width, canvas.height);
+canvas.add(square);
+```
+
+
