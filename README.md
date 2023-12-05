@@ -8,7 +8,7 @@ This workbook focuses on different complex aspects of Typescript language.
 
 ## Mixins
 
-Mixins allow to add some common loosely coupled functionality to any classes. In Typescript mixins can be implemented as independent class extenders or constrained extenders, that can be applied only on classes with specific interfaces. In either case, use of a mixin produces a new subclass of an original class with traits of a mixin. The only problem with mixins is that they cannot produce private or protected properties (but can use ES2020 private fields).
+Mixins in TypeScript enable the incorporation of loosely coupled, shared functionality into classes. Mixins can be written as standalone class extenders or restricted extenders, applicable only to classes with specific interfaces. In both scenarios, applying a mixin results in the creation of a new subclass that inherits traits from both the original class and the mixin. The only important limitations is that they cannot introduce private or protected properties (they can leverage ES2020 private fields for this purpose, but they are not handled by TypeScript).
 
 ### Unconstrained Mixins
 
@@ -54,10 +54,10 @@ intriguingButton.click(); // Button "What do I do?" clicked!
 
 ### Constrained Mixins
 
-Constrained mixins elaborate interfaces of classes (constructor functions) they can be applied to. In order to use constrained mixins one should make a Contructor type to accept a generic argument and create derivative types from it. Then a mixin definition should use one of the derived types.
+Constrained mixins specifically define the interfaces of classes (constructor functions) to which they can be applied. To employ constrained mixins, it's necessary to create a Constructor type that accepts a generic argument, and subsequently generate derivative types based on it. The mixin definition can then utilize one of these derived types, establishing the constraints for its application.
 ```
-type GConstructor<T = {}> = new (...args: any[]) => T;
-type Positionable = GConstructor<{ x: number; y: number }>;
+type Constructor<T = {}> = new (...args: any[]) => T;
+type Positionable = Constructor<{ x: number; y: number }>;
 function InjectRandomlyPlacible<TBase extends Positionable>(Base: TBase) {
   return class RandomlyPlacible extends Base {
     placeRandomly(xmax: number, ymax: number): void {
